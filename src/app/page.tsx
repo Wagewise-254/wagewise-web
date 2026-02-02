@@ -16,7 +16,7 @@ const SplashScreen = () => {
 
     // Redirect to the login page after a total of 2 seconds
     const redirectTimer = setTimeout(() => {
-      router.push('/login');
+      router.push('/download');
     }, 2000);
 
     return () => {
