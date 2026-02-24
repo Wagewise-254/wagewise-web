@@ -44,6 +44,12 @@ interface CreateWorkspaceResult {
     email: string;
     password: string;
   };
+  formData: {
+    // Add this
+    workspaceName: string;
+    ownerEmail: string;
+    ownerName: string;
+  };
 }
 
 export default function OnboardClientDialog() {
@@ -73,13 +79,13 @@ export default function OnboardClientDialog() {
 
     setEmailSending(true);
     try {
-      console.log(result)
-      const formData = watch(); // Get current form values for name and workspace
+      //console.log(result)
+      //const formData = watch(); // Get current form values for name and workspace
       await sendClientCredentialsEmail({
         email: result.credentials.email,
         password: result.credentials.password,
-        ownerName: formData.ownerName,
-        workspaceName: formData.workspaceName,
+         ownerName: result.formData.ownerName,
+        workspaceName: result.formData.workspaceName,
       });
       toast.success("Welcome email sent successfully!");
     } catch (error: unknown) {
@@ -97,7 +103,10 @@ export default function OnboardClientDialog() {
     setLoading(true);
     try {
       const res = await createWorkspace(data);
-      setResult(res);
+      setResult({
+        ...res,
+        formData: data, // Store the original form data
+      });
       confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
       reset();
     } catch (error: unknown) {
